@@ -1,0 +1,71 @@
+{
+  "components": [
+    {
+      "type": "Laetus.NT.Core.PersistenceApi.Implementations.DbAccessProviders, Laetus.NT.Core.PersistenceApi",
+      "services": [
+        {
+          "type": "Laetus.NT.Core.PersistenceApi.Interfaces.IDbAccessProviders, Laetus.NT.Core.PersistenceApi"
+        }
+      ],
+      "injectProperties": true,
+      "instanceScope": "per-dependency"
+    },
+    {
+      "type": "Laetus.NT.Core.PersistenceApi.Implementations.SimpleCrudProvider, Laetus.NT.Core.PersistenceApi",
+      "services": [
+        {
+          "type": "Laetus.NT.Core.PersistenceApi.Interfaces.ICrudProvider, Laetus.NT.Core.PersistenceApi"
+        }
+      ],
+      "injectProperties": true,
+      "instanceScope": "per-dependency"
+    },
+    {
+      "type": "Laetus.NT.Core.PersistenceApi.Implementations.StoredProcedureProvider, Laetus.NT.Core.PersistenceApi",
+      "services": [
+        {
+          "type": "Laetus.NT.Core.PersistenceApi.Interfaces.IStoredProcedureProvider, Laetus.NT.Core.PersistenceApi"
+        }
+      ],
+      "injectProperties": true,
+      "instanceScope": "per-dependency"
+    },
+    {
+      "type": "Laetus.NT.Core.PersistenceApi.Implementations.Versioning, Laetus.NT.Core.PersistenceApi",
+      "services": [
+        {
+          "type": "Laetus.NT.Core.PersistenceApi.Interfaces.IVersioning, Laetus.NT.Core.PersistenceApi"
+        }
+      ],
+      "injectProperties": true,
+      "instanceScope": "per-dependency"
+    },
+    {
+      "type": "Laetus.NT.Core.PersistenceApi.Implementations.PersistenceProvider, Laetus.NT.Core.PersistenceApi",
+      "services": [
+        {
+          "type": "Laetus.NT.Core.PersistenceApi.Interfaces.IPersistenceProvider, Laetus.NT.Core.PersistenceApi"
+        }
+      ],
+      "injectProperties": true,
+      "instanceScope": "per-dependency",
+        "parameters": {
+            "dataBaseType": "MsSqlServer",
+            "connectionString": "Data Source=localhost,1633;Initial Catalog=TestPlant_2.0;User ID=sa;Password=PaSSw0rd_04; MultipleActiveResultSets=True"
+        }
+    },
+    {
+      "type": "Laetus.NT.Core.Persistence.Test.TestApi.TestLogger, Laetus.NT.Core.Persistence.Test",
+      "services": [
+        {
+          "type": "Laetus.NT.Base.Common.Logger.ILogger, Laetus.NT.Base.Common.Logger"
+        }
+      ],
+      "injectProperties": true,
+      "instanceScope": "single-instance",
+      "parameters": {
+        "logFile": "logs\\Pers.log"
+      }
+    }
+  ]
+}
