@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+obj
+bin
+net48
+/sde/dds/idl/Laetus.NTCore.Platform.SDE.DDS.IDL.vcxproj.user
+*.user

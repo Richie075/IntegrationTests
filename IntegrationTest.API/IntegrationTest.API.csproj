@@ -15,19 +15,11 @@
     <None Remove="C:\Users\andreas.risch\.nuget\packages\nunit3testadapter\4.3.1\build\net35\NUnit3.TestAdapter.dll" />
     <None Remove="C:\Users\andreas.risch\.nuget\packages\nunit3testadapter\4.3.1\build\net35\NUnit3.TestAdapter.pdb" />
     <None Remove="C:\Users\andreas.risch\.nuget\packages\nunit3testadapter\4.3.1\build\net35\testcentric.engine.metadata.dll" />
-    <None Remove="SeedData\SEConfiguration\MVSetup\Plant\PackagingTopology.json" />
-    <None Remove="SeedData\SEConfiguration\MVSetup\Plant\PhysicalTopology.json" />
-    <None Remove="SeedData\SEConfiguration\MVSetup\Plant\PlantTopology.json" />
-    <None Remove="SeedData\SEConfiguration\MVSetup\Plant\ProcessUnit.json" />
     <None Remove="Setup\autofacconfigWithTestLogger.json" />
     <None Remove="Setup\Docker\MSSQL\Dockerfile" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="SeedData\SEConfiguration\MVSetup\Plant\PackagingTopology.json" />
-    <EmbeddedResource Include="SeedData\SEConfiguration\MVSetup\Plant\PhysicalTopology.json" />
-    <EmbeddedResource Include="SeedData\SEConfiguration\MVSetup\Plant\PlantTopology.json" />
-    <EmbeddedResource Include="SeedData\SEConfiguration\MVSetup\Plant\ProcessUnit.json" />
     <EmbeddedResource Include="Setup\autofacconfigWithTestLogger.json" />
     <EmbeddedResource Include="Setup\Docker\MSSQL\Dockerfile" />
   </ItemGroup>

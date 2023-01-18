@@ -1,0 +1,120 @@
+[
+  {
+    "Name": "Line",
+    "PhysicalTopology": {
+        "Id": 1,
+        "Name": "LinePhysicalTopology",
+        "PhysicalTopologyHost": [
+            {
+                "Name": "LinePFS",
+                "InstanceId": "32262636-A56C-443A-98D6-DCF827C1E8E3",
+                "SubType": "Line",
+                "Hostname": "DevPC",
+                "IpAddress": "127.0.0.1",
+                "Ports": "7401",
+                "MacAddress": "mac",
+                
+                "PhysicalTopologyHostParameters": []
+            }
+        ]
+    },
+    "PlantTopologyLine": [
+        {
+            "DomainId": 88,
+            "Name": "Line1",
+            "LineId": 1
+        }
+    ],
+    "LineTopology": [
+        {
+            "Id": 1
+            "Variant": "A",
+            "CountryId": 33,
+            "Name": "LineTopology",
+            "RootProcessUnit": {
+                "ProcessUnitId": 2,
+                "Name": "PU1-Root",
+                "IoModule": {
+                    "Name": "IO PU",
+                    "AgentId": 1,
+                    "DisableCommunication": true,
+                    "ExternalStart": false,
+                    "ExternalStartChannel": "",
+                    "ResetDevicesChannel": ""
+                },
+                "ShowOnUi": false,
+                "Children": [
+                    {
+                        "ProcessUnitId": 1,
+                        "Name": "PU1",
+                        "ProcessPhase": "green",
+                        "IoModuleId": 1,
+                        "ShowOnUI": true,
+                        "IoModule": {
+                            "Name": "IO PU",
+                            "AgentId": 13,
+                            "DisableCommunication": false,
+                            "ExternalStart": true,
+                            "ExternalStartChannel": "MVIoResumePo",
+                            "ResetDevicesChannel": "MVIoResetDevicePins"
+                        },
+                        "LineTopologyProcessUnitWorkflowScript": [
+                            {
+                                "WorkflowScript": {
+                                    "Name": "MV-Workflow",
+                                    "Script": "var logger = host.Find('Logger','1.0').Api;\nlogger.info('Po: started, Script Executing');'",
+                                    "ScriptEngineParameters": {
+                                        "DebugEnabled": true,
+                                        "WaitForDebugger": false,
+                                        "RemoteDebugEnabled": false,
+                                        "DebugPort": 9222
+                                    },
+                                    "ScriptParameters": [
+                                        {
+                                            "Key": "StackLightPinForGreen",
+                                            "Value": "Output1",
+                                            "Type": "System.String"
+                                        },
+                                        {
+                                            "Key": "Threshold",
+                                            "Value": "20",
+                                            "Type": "System.Int32"
+                                        },
+                                        {
+                                            "Key": "RefillAmount",
+                                            "Value": "30",
+                                            "Type": "System.Int32"
+                                        }
+                                    ]
+                                }
+                            }
+                        ],
+                        "LineTopologyAgent": [
+                            {
+                                "Name": "IO-Module",
+                                "AgentId": 13,
+                                "AgentRoleId": 1
+                            },
+                            {
+                                "Name": "MV-Camera",
+                                "AgentId": 15,
+                                "AgentRoleId": 2
+                            },
+                            {
+                                "Name": "MV-Printer",
+                                "AgentId": 14,
+                                "AgentRoleId": 3
+                            },
+                            {
+                                "Name": "MV-Scripting",
+                                "AgentId": 11,
+                                "AgentRoleId": 4
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+  }
+]
