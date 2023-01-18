@@ -15,26 +15,35 @@
     <None Remove="C:\Users\andreas.risch\.nuget\packages\nunit3testadapter\4.3.1\build\net35\NUnit3.TestAdapter.dll" />
     <None Remove="C:\Users\andreas.risch\.nuget\packages\nunit3testadapter\4.3.1\build\net35\NUnit3.TestAdapter.pdb" />
     <None Remove="C:\Users\andreas.risch\.nuget\packages\nunit3testadapter\4.3.1\build\net35\testcentric.engine.metadata.dll" />
+    <None Remove="SeedData\SEConfiguration\MVSetup\Plant\PackagingTopology.json" />
+    <None Remove="SeedData\SEConfiguration\MVSetup\Plant\PhysicalTopology.json" />
+    <None Remove="SeedData\SEConfiguration\MVSetup\Plant\PlantTopology.json" />
+    <None Remove="SeedData\SEConfiguration\MVSetup\Plant\ProcessUnit.json" />
     <None Remove="Setup\autofacconfigWithTestLogger.json" />
     <None Remove="Setup\Docker\MSSQL\Dockerfile" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="SeedData\SEConfiguration\MVSetup\Plant\PackagingTopology.json" />
+    <EmbeddedResource Include="SeedData\SEConfiguration\MVSetup\Plant\PhysicalTopology.json" />
+    <EmbeddedResource Include="SeedData\SEConfiguration\MVSetup\Plant\PlantTopology.json" />
+    <EmbeddedResource Include="SeedData\SEConfiguration\MVSetup\Plant\ProcessUnit.json" />
     <EmbeddedResource Include="Setup\autofacconfigWithTestLogger.json" />
     <EmbeddedResource Include="Setup\Docker\MSSQL\Dockerfile" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="AgentHosting\" />
-    <Folder Include="ApplicationAPI\REST\" />
     <Folder Include="ApplicationAPI\SDE\" />
+    <Folder Include="DataFactory\Enums\" />
+    <Folder Include="SeedData\SEConfiguration\MVSetup\Line\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.5.0" />
     <PackageReference Include="FluentAssertions" Version="6.8.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.31" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />

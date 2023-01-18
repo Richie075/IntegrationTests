@@ -51,7 +51,7 @@
       "instanceScope": "per-dependency",
         "parameters": {
             "dataBaseType": "MsSqlServer",
-            "connectionString": "Data Source=localhost,1633;Initial Catalog=TestPlant_2.0;User ID=sa;Password=PaSSw0rd_04; MultipleActiveResultSets=True"
+            "connectionString": "Data Source=localhost,1633;Initial Catalog=TestPlant_2.0;User ID=sa;Password=PaSSw0rd_04; MultipleActiveResultSets=True;TrustServerCertificate=True;Encrypt=False"
         }
     },
     {

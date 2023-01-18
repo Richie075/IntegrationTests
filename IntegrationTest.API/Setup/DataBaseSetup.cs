@@ -73,8 +73,7 @@ namespace IntegrationTest.API.Setup
                 _dbContainer = builder.Build();
                 await _dbContainer.StartAsync();
 
-                Persistence = CreateProvider(true);
-            }
+                Persistence = PersistenceInitializer.CreateProvider(true);}
             catch (Exception ex)
             {
                 Console.Write(ex.ToString());
@@ -89,30 +88,13 @@ namespace IntegrationTest.API.Setup
             await _dbContainer.StopAsync();
         }
 
-        private IPersistenceProvider CreateProvider(bool deleteExisting)
-        {
-            Persistence ??= GetPersistenceProvider();
-
-            var dataBaseExists = CheckIfDatabaseExists(Persistence);
-            if (dataBaseExists && deleteExisting)
-            {
-                Persistence.Delete();
-                dataBaseExists = false;
-            }
-            if (!dataBaseExists)
-            {
-                Persistence.Create();
-                Persistence.Migrate();
-            }
-
-            return Persistence;
-        }
+        
 
         private void TestCleanup(bool force)
         {
             TestContext.WriteLine($"DB CleanUp forced: {force} for config: {_autofacConfigFile}");
-            var persistenceProvider = GetPersistenceProvider();
-            var dataBaseExists = CheckIfDatabaseExists(persistenceProvider);
+            var persistenceProvider = PersistenceInitializer.GetPersistenceProvider();
+            var dataBaseExists = PersistenceInitializer.CheckIfDatabaseExists(persistenceProvider);
             if (dataBaseExists && force)
             {
                 TestContext.WriteLine($"Deleting DB : {force} for config: {_autofacConfigFile}");
@@ -120,48 +102,9 @@ namespace IntegrationTest.API.Setup
             }
         }
 
-        private IPersistenceProvider GetPersistenceProvider()
-        {
-            var logPath = Path.Combine(typeof(DataBaseSetup).Assembly.Location, "log");
-            var logger = new TestLogger(logPath);
-            var pers = new PersistenceProvider(
-                new DbAccessProviders(new SimpleCrudProvider(logger), new StoredProcedureProvider(), new Versioning(logger)),
-                Laetus.NT.Core.PersistenceApi.Enumerations.DataBaseType.MsSqlServer,
-                "Data Source=localhost,1633;Initial Catalog=TestPlant_2.0;User ID=sa;Password=PaSSw0rd_04; MultipleActiveResultSets=True",
-                logger
-                );
-            //var config = new ConfigurationBuilder();
-            //var fileName = GetResourceFile(_autofacConfigFile);
-            //config.AddJsonFile(fileName);
-            //var module = new ConfigurationModule(config.Build());
-            //var builder = new ContainerBuilder();
-            //builder.RegisterModule(module);
-            //var Container = builder.Build();
-            //using var scope = Container.BeginLifetimeScope();
-            //var persistenceProvider = scope.Resolve<IPersistenceProvider>();
-            return pers;
-        }
+       
 
-        private bool CheckIfDatabaseExists(IPersistenceProvider persistenceProvider)
-        {
-            using var connection = new SqlConnection(persistenceProvider.Connector.ConnectionString);
-            using (var command = new SqlCommand("SELECT db_id(@databaseName)", connection))
-            {
-                command.Parameters.Add(new SqlParameter("databaseName", persistenceProvider.Connector.DataBaseName));
-                try
-                {
-                    connection.Open();
-
-                    var result = command.ExecuteScalar();
-                    connection.Close();
-                    return result != DBNull.Value;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-        }
+        
 
         private string GetResourceFile(string resName)
         {
