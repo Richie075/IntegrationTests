@@ -14,7 +14,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         {
             _prefix = prefix;
             var agent = new AgentBuilder()
-                .WithName($"{prefix}Crevis IO Module")
+                .WithName($"{prefix}{TestConstants.CrevisName}")
                 .WithAgentType(1)
                 .WithAssemblyName("Laetus.NT.Core.DeviceReflector.DeviceReflectorAgent")
                 .WithInstanceId(Guid.NewGuid())

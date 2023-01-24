@@ -9,7 +9,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         internal override Agent ConstructModel(string prefix = "")
         {
             return new AgentBuilder()
-                .WithName($"{prefix}Mapping Editor")
+                .WithName($"{prefix}{TestConstants.MappingEditorName}")
                 .WithAgentType(0)
                 .WithAssemblyName("Laetus.NT.Core.MappingEditor.Agent")
                 .WithInstanceId(Guid.NewGuid())

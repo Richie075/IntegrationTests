@@ -1,7 +1,8 @@
-﻿using Laetus.NT.Core.Persistence.Test.TestUtils;
+﻿using IntegrationTest.API.DataFactory.Agents;
+using Laetus.NT.Core.Persistence.Test.TestUtils;
 using Laetus.NT.Core.PersistenceApi.DataModel.conf;
 
-namespace IntegrationTest.API.DataFactory.Agents.Creators.SeSetupCreators.SimpleMv
+namespace IntegrationTest.API.SeedData.SEConfiguration.MVSetup.SimpleMv
 {
     public class MvPackagingTopologyCreator : ModelCreator<PackagingTopology>
     {

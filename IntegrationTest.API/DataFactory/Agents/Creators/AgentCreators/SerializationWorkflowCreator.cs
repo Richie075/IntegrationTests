@@ -10,7 +10,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         internal override Agent ConstructModel(string prefix = "")
         {
             return new AgentBuilder()
-                .WithName($"{prefix}SerializationWorkflow")
+                .WithName($"{prefix}{TestConstants.MvWorkflowName}")
                 .WithAgentType(2)
                 .WithAssemblyName("Laetus.NT.Core.ScriptExecutionAgent")
                 .WithInstanceId(Guid.NewGuid())

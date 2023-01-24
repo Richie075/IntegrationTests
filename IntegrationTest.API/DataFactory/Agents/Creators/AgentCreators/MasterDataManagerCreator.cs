@@ -8,7 +8,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         internal override Agent ConstructModel(string prefix = "")
         {
             return new AgentBuilder()
-                .WithName($"{prefix}Master Data Manager")
+                .WithName($"{prefix}{TestConstants.MasterDataManagerName}")
                 .WithAgentType(0)
                 .WithAssemblyName("Laetus.NT.Core.MasterDataManager.Agent")
                 .WithInstanceId(Guid.NewGuid())

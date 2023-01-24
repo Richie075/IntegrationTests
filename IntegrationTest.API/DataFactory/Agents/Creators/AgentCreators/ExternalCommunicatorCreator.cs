@@ -9,7 +9,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         internal override Agent ConstructModel(string prefix = "")
         {
             return new AgentBuilder()
-                .WithName($"{prefix}External Communicator")
+                .WithName($"{prefix}{TestConstants.ExternalCommunicatorName}")
                 .WithAgentType(0)
                 .WithAssemblyName("Laetus.NT.Core.EC.Agent")
                 .WithInstanceId(Guid.NewGuid())

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IntegrationTest.API.DataFactory.Agents.Builders;
+﻿using IntegrationTest.API.DataFactory.Agents.Builders;
 using Laetus.NT.Core.Persistence.Test.TestUtils;
 using Laetus.NT.Core.PersistenceApi.DataModel.conf;
 using Laetus.NT.Core.PersistenceApi.DataModel.wf;
@@ -18,7 +13,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         {
             _prefix = prefix;
             return new AgentBuilder()
-                .WithName($"{prefix}ManualOperations")
+                .WithName($"{prefix}{TestConstants.MoWorkflowNameName}")
                 .WithAgentType(2)
                 .WithAssemblyName("Laetus.NT.Core.ScriptExecutionAgent")
                 .WithInstanceId(Guid.NewGuid())

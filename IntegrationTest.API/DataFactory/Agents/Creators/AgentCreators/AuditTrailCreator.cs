@@ -9,7 +9,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         internal override Agent ConstructModel(string prefix = "")
         {
             return new AgentBuilder()
-                .WithName($"{prefix}Audit Trail")
+                .WithName($"{prefix}{TestConstants.AuditTrailName}")
                 .WithAgentType(0)
                 .WithAssemblyName("Laetus.NT.Core.Platform.AuditTrail")
                 .WithInstanceId(Guid.NewGuid())

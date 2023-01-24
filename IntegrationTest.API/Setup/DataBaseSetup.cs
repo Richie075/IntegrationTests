@@ -3,14 +3,19 @@ using Autofac.Configuration;
 using System;
 using System.IO;
 using System.Reflection;
+using Docker.DotNet;
+using Docker.DotNet.Models;
 using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
 using Laetus.NT.Core.Persistence.Test.TestApi;
+using Laetus.NT.Core.PersistenceApi.Context;
 using Laetus.NT.Core.PersistenceApi.DataModel.conf;
 using Laetus.NT.Core.PersistenceApi.Implementations;
 using Laetus.NT.Core.PersistenceApi.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using TechTalk.SpecFlow.Infrastructure;
 using ContainerBuilder = Autofac.ContainerBuilder;
@@ -20,7 +25,8 @@ namespace IntegrationTest.API.Setup
     public class DataBaseSetup
     {
         private readonly string _autofacConfigFile = "autofacconfigWithTestLogger.json";
-        public IPersistenceProvider Persistence { get; private set; }
+        public IPersistenceProvider PlantPersistence { get; private set; }
+        public IPersistenceProvider LinePersistence { get; private set; }
 
         public DataBaseSetup()
         {
@@ -29,28 +35,26 @@ namespace IntegrationTest.API.Setup
         }
 
         private TestcontainersContainer _dbContainer;
+        private TestcontainersContainer _dbContainer1;
 
-        //private async Task CreateDocker()
-        //{
-        //    DockerClient client = new DockerClientConfiguration()
-        //        .CreateClient();
-        //    var dockerFile = GetResourceFile("Dockerfile");
-        //    var imageFromFile = new ImageFromDockerfileBuilder().WithDockerfile(dockerFile).Build();
-        //    var image = client.Images.CreateImageAsync(
-        //            new ImagesCreateParameters
-        //            {
-        //                FromImage = "mcr.microsoft.com/mssql/server",
-        //                Tag = "2022-latest"
-        //            },
-        //            null,
-        //            new Progress<JSONMessage>()
-        //        );
-        //}
+        private async Task CreateDocker()
+        {
+            await DockerSqlDatabaseUtilities.EnsureDockerStartedAndGetContainerIdAndPortAsync();
+        }
+
+
+        private string _dockerContainerId;
+        private string _dockerSqlPort;
+
+        public async Task Setup()
+        {
+
+        }
         public async Task CreateDataBase()
         {
             try
             {
-                //CreateDocker();
+                //await CreateDocker();
                 var builder =
                     new TestcontainersBuilder<TestcontainersContainer>()
                         .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
@@ -63,17 +67,53 @@ namespace IntegrationTest.API.Setup
                         .WithPortBinding(1633, 1433)
                         .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
                         ;
-                //var _ = await 
+                //var config = new MsSqlTestcontainerConfiguration()
+                //{
+                //    Password = "Pa$$w0rd!"
+                //};
+                //var builder1 = new TestcontainersBuilder<MsSqlTestcontainer>()
+                //    .WithName(Guid.NewGuid().ToString("D"))
+                //    .WithEnvironment("SA_PASSWORD", "PaSSw0rd_04")
+                //    .WithEnvironment("ACCEPT_EULA", "true")
+                //    .WithEnvironment("MSSQL_TCP_PORT", "1433")
+                //    .WithEnvironment("MSSQL_PID", "Developer")
+                //    .WithPortBinding(1833, 1433)
+                //    .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433));
+                //Environment.SetEnvironmentVariable("DOCKER_HOST", "my-docker-endpoint");
+                //var builder =
+                //        new TestcontainersBuilder<TestcontainersContainer>()
+                //            .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+                //            .WithDockerEndpoint("my-docker-endpoint")
+                //            .WithName(Guid.NewGuid().ToString("D"))
+                //            .WithEnvironment("SA_PASSWORD", "PaSSw0rd_04")
+                //            .WithEnvironment("ACCEPT_EULA", "true")
+                //            .WithEnvironment("MSSQL_TCP_PORT", "1433")
+                //            .WithEnvironment("MSSQL_PID", "Developer")
+                //            .WithPortBinding(1633, 1433)
+                //            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
+                //    ;
+                //var dockerFileDir = Path.Combine(CommonDirectoryPath.GetProjectDirectory().DirectoryPath, @"Setup\\Docker\\MSSQL");
+                //if (File.Exists(Path.Combine(dockerFileDir, "Dockerfile")))
+                //{
+                //    var _ = await
                 //        new ImageFromDockerfileBuilder()
                 //            .WithName(Guid.NewGuid().ToString("D"))
-                //            .WithDockerfileDirectory(CommonDirectoryPath.GetSolutionDirectory(), "Setup/Docker/MSSQL")
-                //            .WithDockerfile("Dockerfile").Build();
-                //    ;
-                //    _.
+                //            .WithDockerfileDirectory(dockerFileDir)
+                //            .WithDockerfile("Dockerfile")
+                //            .WithDockerEndpoint("my-docker-endpoint")
+                //            .Build();
+
+                //}
+                
+                
+                // _dbContainer1 = builder1.Build();
+                //await _dbContainer1.StartAsync();
                 _dbContainer = builder.Build();
                 await _dbContainer.StartAsync();
 
-                Persistence = PersistenceInitializer.CreateProvider(true);}
+                PlantPersistence = PersistenceInitializer.CreateProvider(TestConstants.PlantDbName);
+                LinePersistence = PersistenceInitializer.CreateProvider(TestConstants.LineDbName);
+            }
             catch (Exception ex)
             {
                 Console.Write(ex.ToString());
@@ -82,6 +122,7 @@ namespace IntegrationTest.API.Setup
         }
 
         
+
         public async Task DeleteDataBase()
         {
             TestCleanup(true);
@@ -92,14 +133,14 @@ namespace IntegrationTest.API.Setup
 
         private void TestCleanup(bool force)
         {
-            TestContext.WriteLine($"DB CleanUp forced: {force} for config: {_autofacConfigFile}");
-            var persistenceProvider = PersistenceInitializer.GetPersistenceProvider();
-            var dataBaseExists = PersistenceInitializer.CheckIfDatabaseExists(persistenceProvider);
-            if (dataBaseExists && force)
-            {
-                TestContext.WriteLine($"Deleting DB : {force} for config: {_autofacConfigFile}");
-                persistenceProvider.Delete();
-            }
+            //TestContext.WriteLine($"DB CleanUp forced: {force} for config: {_autofacConfigFile}");
+            //var persistenceProvider = PersistenceInitializer.GetPersistenceProvider();
+            //var dataBaseExists = PersistenceInitializer.CheckIfDatabaseExists(persistenceProvider);
+            //if (dataBaseExists && force)
+            //{
+            //    TestContext.WriteLine($"Deleting DB : {force} for config: {_autofacConfigFile}");
+            //    persistenceProvider.Delete();
+            //}
         }
 
        

@@ -23,5 +23,12 @@ namespace IntegrationTest.API.DataFactory.Agents.Builders
             testObject.PlantTopology = plantTopologies;
             return this;
         }
+
+        public PhysicalTopologyBuilder WithLine(IList<Line> lines)
+        {
+            testObject.Line = lines;
+            return this;
+        }
+
     }
 }

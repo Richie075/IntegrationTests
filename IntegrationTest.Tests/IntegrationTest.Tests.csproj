@@ -53,7 +53,7 @@
       <Version>7.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore">
-      <Version>3.1.31</Version>
+      <Version>3.1.16</Version>
     </PackageReference>
     <PackageReference Include="NUnit">
       <Version>3.13.3</Version>
@@ -69,6 +69,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\hmi\agent\Laetus.NT.Core.HMI.Agent.csproj">
+      <Project>{66186fee-b338-45ea-a00d-6ddefea4bad9}</Project>
+      <Name>Laetus.NT.Core.HMI.Agent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PersistenceCore\Laetus.NT.Core.Persistence.Test\Laetus.NT.Core.Persistence.Test.csproj">
       <Project>{181ab811-9713-4955-beda-1e437c357e3e}</Project>
       <Name>Laetus.NT.Core.Persistence.Test</Name>

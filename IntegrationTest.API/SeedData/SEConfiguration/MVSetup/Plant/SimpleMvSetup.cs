@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IntegrationTest.API.DataFactory.Agents;
+﻿using IntegrationTest.API.DataFactory.Agents;
 using IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators;
-using IntegrationTest.API.DataFactory.Agents.Creators.SeSetupCreators;
-using IntegrationTest.API.DataFactory.Agents.Creators.SeSetupCreators.SimpleMv;
-using Laetus.NT.Core.Persistence.Test.TestUtils;
+using IntegrationTest.API.SeedData.SEConfiguration.MVSetup.SimpleMv;
 using Laetus.NT.Core.PersistenceApi.DataModel.conf;
 using Laetus.NT.Core.PersistenceApi.DataModel.pd;
 using Laetus.NT.Core.PersistenceApi.Interfaces;
-using NUnit.Framework;
 
 namespace IntegrationTest.API.SeedData.SEConfiguration.MVSetup.Plant
 {
     public class SimpleMvSetup : ISetupCreator
     {
-        private IPersistenceProvider _persistenceProvider;
+        private IPersistenceProvider _plantPersistenceProvider;
+        private IPersistenceProvider _linePersistenceProvider;
         private ModelFactory _modelFactory;
 
-        public SimpleMvSetup(IPersistenceProvider persistenceProvider)
+        public SimpleMvSetup(IPersistenceProvider plantPersistenceProvider, IPersistenceProvider linePersistenceProvider)
         {
-            _persistenceProvider = persistenceProvider ?? throw new ArgumentNullException(nameof(persistenceProvider));
+            _plantPersistenceProvider = plantPersistenceProvider ?? throw new ArgumentNullException(nameof(plantPersistenceProvider));
+            _linePersistenceProvider = linePersistenceProvider ?? throw new ArgumentNullException(nameof(linePersistenceProvider));
             _modelFactory = new ModelFactory();
         }
         public void CreateSetup()
@@ -31,6 +25,7 @@ namespace IntegrationTest.API.SeedData.SEConfiguration.MVSetup.Plant
             CreateProcessUnits();
             CreatePackagingTopology();
             CreatePlantPhysicalTopology();
+            CreateLinePhysicalTopology();
         }
 
         private void CreateAgents()
@@ -52,9 +47,21 @@ namespace IntegrationTest.API.SeedData.SEConfiguration.MVSetup.Plant
                 _modelFactory.CreateModel(new DeviceServerCreator()),
                 _modelFactory.CreateModel(new LineCreator()),
                 _modelFactory.CreateModel(new ExternalCommunicatorCreator()),
-                _modelFactory.CreateModel(new AuditTrailCreator()),
+                _modelFactory.CreateModel(new AuditTrailCreator())
             };
-            _persistenceProvider.CrudProvider.Create(agents, 20);
+            _plantPersistenceProvider.CrudProvider.Create(agents, 20);
+
+            agents = new List<Agent>
+            {
+                _modelFactory.CreateModel(new SerializationWorkflowCreator()),
+                _modelFactory.CreateModel(new CrevisCreator()),
+                _modelFactory.CreateModel(new WolkeCreator()),
+                _modelFactory.CreateModel(new ICamCreator()),
+                _modelFactory.CreateModel(new DeviceServerCreator()),
+                _modelFactory.CreateModel(new LineCreator()),
+                _modelFactory.CreateModel(new HMICreator())
+            };
+            _linePersistenceProvider.CrudProvider.Create(agents, 20);
         }
         private void CreateProcessUnits()
         {
@@ -63,21 +70,31 @@ namespace IntegrationTest.API.SeedData.SEConfiguration.MVSetup.Plant
                 _modelFactory.CreateModel(new MvProcessUnitCreator("RootPU", 1)),
                 _modelFactory.CreateModel(new MvProcessUnitCreator("CartonPU", 1))
             };
-            _persistenceProvider.CrudProvider.Create(processUnits, 5);
+            _plantPersistenceProvider.CrudProvider.Create(processUnits, 5);
+            _linePersistenceProvider.CrudProvider.Create(processUnits, 5);
         }
 
         private void CreatePackagingTopology()
         {
-            var countryId = _persistenceProvider.CrudProvider.Read<Country>(c => c.Name == "*").Single();
+            var countryId = _plantPersistenceProvider.CrudProvider.Read<Country>(c => c.Name == "*").Single();
             var pt = _modelFactory.CreateModel(new MvPackagingTopologyCreator(countryId.Id, 1), "Carton");
-            _persistenceProvider.CrudProvider.Create(pt);
+            _plantPersistenceProvider.CrudProvider.Create(pt);
+            _linePersistenceProvider.CrudProvider.Create(pt);
 
         }
 
         private void CreatePlantPhysicalTopology()
         {
-            var pt = _modelFactory.CreateModel(new MvPlantPhysicalTopologyCreator(_persistenceProvider));
-            _persistenceProvider.CrudProvider.Create(pt);
+            var pt = _modelFactory.CreateModel(new MvPlantPhysicalTopologyCreator(_plantPersistenceProvider));
+            _plantPersistenceProvider.CrudProvider.Create(pt);
+            
+        }
+
+        private void CreateLinePhysicalTopology()
+        {
+            var pt = _modelFactory.CreateModel(new MvLinePhysicalTopologyCreator(_linePersistenceProvider));
+
+            _linePersistenceProvider.CrudProvider.Create(pt);
         }
 
     }

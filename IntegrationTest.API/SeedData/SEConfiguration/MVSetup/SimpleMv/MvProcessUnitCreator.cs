@@ -1,13 +1,14 @@
-﻿using Laetus.NT.Core.Persistence.Test.TestUtils;
+﻿using IntegrationTest.API.DataFactory.Agents;
+using Laetus.NT.Core.Persistence.Test.TestUtils;
 using Laetus.NT.Core.PersistenceApi.DataModel.pd;
 
-namespace IntegrationTest.API.DataFactory.Agents.Creators.SeSetupCreators.SimpleMv
+namespace IntegrationTest.API.SeedData.SEConfiguration.MVSetup.SimpleMv
 {
     internal class MvProcessUnitCreator : ModelCreator<ProcessUnit>
     {
-        private string _name;
+        private readonly string _name;
 
-        private int _level;
+        private readonly int _level;
 
         public MvProcessUnitCreator(string name, int level)
         {

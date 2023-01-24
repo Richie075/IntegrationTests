@@ -8,7 +8,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         internal override Agent ConstructModel(string prefix = "")
         {
             return new AgentBuilder()
-                .WithName($"{prefix}Control Panel")
+                .WithName($"{prefix}{TestConstants.ControlPanelName}")
                 .WithAgentType(0)
                 .WithAssemblyName("Laetus.NT.Core.ControlPanel")
                 .WithInstanceId(Guid.NewGuid())

@@ -9,7 +9,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         internal override Agent ConstructModel(string prefix = "")
         {
             AgentBuilder ab = new AgentBuilder()
-                .WithName($"{prefix}Authentication")
+                .WithName($"{prefix}{TestConstants.AuthenticationName}")
                 .WithAgentType(0)
                 .WithAssemblyName("DummyAuthAgent")
                 .WithInstanceId(Guid.NewGuid());

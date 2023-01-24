@@ -13,7 +13,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         {
             _prefix = prefix;
             return new AgentBuilder()
-                .WithName($"{_prefix}Wolke")
+                .WithName($"{_prefix}{TestConstants.WolkeName}")
                 .WithAgentType(1)
                 .WithAssemblyName("Laetus.NT.Core.DeviceReflector.DeviceReflectorAgent")
                 .WithInstanceId(Guid.NewGuid())

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using Laetus.NT.Core.Persistence.Test.TestUtils;
 using Laetus.NT.Core.PersistenceApi.DataModel.conf;
 using Laetus.NT.Core.PersistenceApi.Enumerations;
@@ -14,7 +10,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         internal override Agent ConstructModel(string prefix = "")
         {
             return new AgentBuilder()
-                .WithName($"{prefix}Line")
+                .WithName($"{prefix}{TestConstants.LineName}")
                 .WithAgentType(0)
                 .WithAssemblyName("Laetus.NT.Core.Line.Agent")
                 .WithInstanceId(Guid.NewGuid())

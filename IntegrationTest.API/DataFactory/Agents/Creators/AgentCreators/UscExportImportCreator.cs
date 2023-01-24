@@ -9,7 +9,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         internal override Agent ConstructModel(string prefix = "")
         {
             return new AgentBuilder()
-                .WithName($"{prefix}USC Export-Import")
+                .WithName($"{prefix}{TestConstants.UscExportImportName}")
                 .WithAgentType(0)
                 .WithAssemblyName("Laetus.NT.Core.USCExportImport")
                 .WithInstanceId(Guid.NewGuid())

@@ -9,7 +9,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         internal override Agent ConstructModel(string prefix = "")
         {
             return new AgentBuilder()
-                .WithName($"{prefix}PO Manager")
+                .WithName($"{prefix}{TestConstants.PoManagerName}")
                 .WithAgentType(0)
                 .WithAssemblyName("Laetus.NT.Core.POManager.Agent")
                 .WithInstanceId(Guid.NewGuid())

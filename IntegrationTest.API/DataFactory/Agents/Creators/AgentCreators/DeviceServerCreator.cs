@@ -8,7 +8,7 @@ namespace IntegrationTest.API.DataFactory.Agents.Creators.AgentCreators
         internal override Agent ConstructModel(string prefix = "")
         {
             return new AgentBuilder()
-                .WithName($"{prefix}DeviceServer")
+                .WithName($"{prefix}{TestConstants.DeviceServerName}")
                 .WithAgentType(0)
                 .WithAssemblyName("Laetus.NT.Core.Platform.Cameraserver.Agent")
                 .WithInstanceId(Guid.NewGuid())
