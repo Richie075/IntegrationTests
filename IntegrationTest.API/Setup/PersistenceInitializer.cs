@@ -7,12 +7,12 @@ namespace IntegrationTest.API.Setup
 {
     public static class PersistenceInitializer
     {
-        public static IPersistenceProvider CreateProvider(string dbName)
+        public static IPersistenceProvider CreateProvider(string dbName, bool deleteExisting = true)
         {
             var persistence = GetPersistenceProvider(dbName);
 
             var dataBaseExists = CheckIfDatabaseExists(persistence);
-            if (dataBaseExists)
+            if (dataBaseExists && deleteExisting)
             {
                 persistence.Delete();
             }
@@ -24,12 +24,12 @@ namespace IntegrationTest.API.Setup
         }
         public static  IPersistenceProvider GetPersistenceProvider(string dbName)
         {
-            var logPath = Path.Combine(typeof(DataBaseSetup).Assembly.Location, "log");
-            var logger = new TestLogger(logPath);
+            var logger = new TestLogger("Persistence");
             var pers = new PersistenceProvider(
                 new DbAccessProviders(new SimpleCrudProvider(logger), new StoredProcedureProvider(), new Versioning(logger)),
                 Laetus.NT.Core.PersistenceApi.Enumerations.DataBaseType.MsSqlServer,
-                $"Data Source=localhost,1633;Initial Catalog={dbName};User ID=sa;Password=PaSSw0rd_04; MultipleActiveResultSets=True;;TrustServerCertificate=True;Encrypt=False",
+                //$"Data Source=localhost,1633;Initial Catalog={dbName};User ID=sa;Password=PaSSw0rd_04; MultipleActiveResultSets=True;;TrustServerCertificate=True;Encrypt=False",
+                $"Data Source=.;Initial Catalog=TmpPlant_2.0;Integrated Security=true; MultipleActiveResultSets=True;;TrustServerCertificate=True;Encrypt=False",
                 logger
             );
             //var config = new ConfigurationBuilder();

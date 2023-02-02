@@ -1,4 +1,5 @@
-﻿using IntegrationTest.API;
+﻿using System.Threading;
+using IntegrationTest.API;
 using IntegrationTest.API.AgentHosting;
 using IntegrationTest.API.SeedData.SEConfiguration.MVSetup.Plant;
 using IntegrationTest.API.Setup;
@@ -18,13 +19,14 @@ namespace IntegrationTest.Tests
             _plantPersistenceProvider = PersistenceInitializer.CreateProvider(TestConstants.PlantDbName);
             _linePersistenceProvider = PersistenceInitializer.CreateProvider(TestConstants.LineDbName);
             _configurationFactory = new ConfigurationFactory(new SimpleMvSetup(_plantPersistenceProvider, _linePersistenceProvider));
-            _configurationFactory.CreateSetup();
+            _configurationFactory.CreateSetup(); 
             PlantApplicationHost pah = new PlantApplicationHost(_plantPersistenceProvider);
             pah.DoSomething();
         }
         [Test]
         public void TestSomething()
         {
+            Thread.Sleep(10000000);
             Assert.True(true);
         }
     }

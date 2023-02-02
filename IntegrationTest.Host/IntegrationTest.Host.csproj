@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E645930F-41E8-46A7-A935-218ADCB59B00}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>IntegrationTest.Host</RootNamespace>
+    <AssemblyName>IntegrationTest.Host</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>,,\IntegrationTest.Tests\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AgentService.cs" />
+    <Compile Include="AssemblyLoader.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="autofacconfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="copy_DB_SeedingData.cmd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="copy_plant_agents.cmd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="copy_sde_libs.cmd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac">
+      <Version>4.8.1</Version>
+    </PackageReference>
+    <PackageReference Include="Topshelf">
+      <Version>4.3.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\agents\agent_common\AgentCommon\Laetus.NT.Base.Platform.AgentCommon.csproj">
+      <Project>{e59ccb3e-bbf6-45b1-8a30-fdd365286ea3}</Project>
+      <Name>Laetus.NT.Base.Platform.AgentCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\line\agent\agent\Laetus.NT.Core.Line.Agent.csproj">
+      <Project>{5db5ab51-8c91-415e-93eb-8f9240e55100}</Project>
+      <Name>Laetus.NT.Core.Line.Agent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\logger\logger\Laetus.NT.Base.Common.Logger.csproj">
+      <Project>{5caaaf1a-7dfe-4f5b-be52-feb466038d1a}</Project>
+      <Name>Laetus.NT.Base.Common.Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PersistenceCore\Laetus.NT.Core.Persistence.Test\Laetus.NT.Core.Persistence.Test.csproj">
+      <Project>{181ab811-9713-4955-beda-1e437c357e3e}</Project>
+      <Name>Laetus.NT.Core.Persistence.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PersistenceCore\Laetus.NT.Core.PersistenceApi\Laetus.NT.Core.PersistenceApi.csproj">
+      <Project>{8200ecb2-4ef2-41cb-a660-7ba8af0b3edb}</Project>
+      <Name>Laetus.NT.Core.PersistenceApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\sde\interface\Laetus.NT.Base.Platform.SDE.csproj">
+      <Project>{3c0cb258-a28b-44bb-b601-fb4345a2b6d0}</Project>
+      <Name>Laetus.NT.Base.Platform.SDE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\sde\LocalSde\LocalSde.csproj">
+      <Project>{82BD931E-E9A0-44AA-BB8D-F96E8F247387}</Project>
+      <Name>LocalSde</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\sde\SdeContext\Laetus.NT.Base.Platform.SdeContext.csproj">
+      <Project>{b8793219-cf45-4310-b6ee-bfbaf022807b}</Project>
+      <Name>Laetus.NT.Base.Platform.SdeContext</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntegrationTest.API\IntegrationTest.API.csproj">
+      <Project>{ec5faf23-ce6c-4d1c-8ef9-e9bce9fef289}</Project>
+      <Name>IntegrationTest.API</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cmd /c copy_sde_libs.cmd "$(TargetDir)" "$(SolutionDir)"
+cmd /c copy_plant_agents.cmd "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

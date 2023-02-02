@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
       <LangVersion>10.0</LangVersion>
+      <Platforms>AnyCPU;x64</Platforms>
+      <BaseOutputPath>..\bin\x64\Debug</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,11 +44,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\hmi\agent\Laetus.NT.Core.HMI.Agent.csproj" />
-    <ProjectReference Include="..\..\line\agent\agent\Laetus.NT.Core.Line.Agent.csproj" />
     <ProjectReference Include="..\..\PersistenceCore\Laetus.NT.Core.Persistence.Test\Laetus.NT.Core.Persistence.Test.csproj" />
     <ProjectReference Include="..\..\PersistenceCore\Laetus.NT.Core.PersistenceApi\Laetus.NT.Core.PersistenceApi.csproj" />
     <ProjectReference Include="..\..\platform_service\PlatformServiceWindowsService\PlatformServiceWindowsService.csproj" />
+    <ProjectReference Include="..\..\platform_service\PlatformService\Laetus.NT.Base.Platform.PlatformService.csproj" />
     <ProjectReference Include="..\..\sde\LocalSde\LocalSde.csproj" />
   </ItemGroup>
 
