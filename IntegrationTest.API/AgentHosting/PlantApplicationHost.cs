@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using IntegrationTest.API.Setup;
@@ -102,60 +103,25 @@ namespace IntegrationTest.API.AgentHosting
         }
         public async void DoSomething()
         {
+            var agentPath = Path.Combine(@"D:\SVN\current\up2\global\bin\x64\Debug\PLant.PFS");
+            AppDomainSetup setup = new AppDomainSetup();
+            setup.ApplicationBase = agentPath;
+            // setup.ConfigurationFile = "(some file)";
 
-                ILogger logger = new TestLogger("IntegrationTest");
+            // Set up the Evidence
+            Evidence baseEvidence = AppDomain.CurrentDomain.Evidence;
+            Evidence evidence = new Evidence(baseEvidence);
+            //evidence.AddAssembly("(some assembly)");
+            //evidence.AddHost("(some host)");
 
-                ISde sde = new EventBasedSde(TestConstants.PlantDomainId, logger);
-                var services = new ServiceCollection();
-                var agents = new List<Task>();
-                //foreach (var a in _agents.Skip(0).Take(1))
-                //{
-                //    try
-                //    {
-                //        var agent = CreateInstance(a.Value,
-                //            _persistenceProvider.CrudProvider.Read<Agent>(ag => ag.AssemblyName == a.Key).First().Id,
-                //            sde,
-                //            logger, _persistenceProvider);
-                //        agents.Add(Task.Run(() => agent.Start()));
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        Console.WriteLine(ex.Message);
-                //    }
-                //}
-
-                ;
-                //await Task.WhenAll(agents);
-                //var servProvider = Bootstrapper.GetServiceProvider(services,
-                //    _agents.Select(a => CreateInstance(a.Value, _persistenceProvider.CrudProvider.Read<Agent>(ag => ag.AssemblyName == a.Key).First().Id, sde, logger, _persistenceProvider)));
-
-                var cts = new CancellationTokenSource();
-                foreach (var a in _agents)
-                {
-                    try { 
-                        var rc = HostFactory.Run(x => //1
-                        {
-                            x.Service<IAgent>(s => //2
-                            {
-                                s.ConstructUsing(name => CreateInstance(a.Value, _persistenceProvider.CrudProvider.Read<Agent>(ag => ag.AssemblyName == a.Key).First().Id, sde, logger, _persistenceProvider)); //3
-                                s.WhenStarted(tc => tc.Start()); //4
-                                s.WhenStopped(tc => tc.Stop()); //5
-                            });
-                            x.RunAsLocalSystem(); //6
-
-                            x.SetDescription($"{a.Key} Sample Topshelf Host"); //7
-                            x.SetDisplayName($"{a.Key}_Stuff"); //8
-                            x.SetServiceName($"{a.Key}_Stuff"); //9
-                        });
-                        var exitCode = (int)Convert.ChangeType(rc, rc.GetTypeCode());
-
-                    //LaunchCommandLineApp();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-            }
+            //AppDomain domain = AppDomain.CreateDomain("IntegrationTests", evidence, setup);
+            AppDomain domain = AppDomain.CreateDomain("IntegrationTests");
+            domain.GetAssemblies().ToList().ForEach(Console.WriteLine);
+            //domain.InitializeLifetimeService();
+            var type = typeof(AgentHost);
+            var service = (AgentHost)domain.CreateInstanceAndUnwrap(type.Assembly.FullName, type.FullName);
+            service.InjectAgentService(new PlantAgentService());
+            service.Start();
         }
         
         static void LaunchCommandLineApp()

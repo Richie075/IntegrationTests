@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Policy;
+using IntegrationTest.API.AgentHosting;
 using Laetus.NT.Base.Common.Logger;
 using Laetus.NT.Base.Platform.Agent;
 using Laetus.NT.Core.PersistenceApi.Interfaces;
@@ -19,79 +20,12 @@ namespace IntegrationTest.Host
     internal class Program
     {
 
-        private static AgentService service;
+        private static AgentHost service;
         public static void Main(string[] args)
         {
             Start();
 
-            //foreach (var dll in dlls)
-            //{
-            //    if (configuredAgents.Any(ca => ca.AssemblyName.Contains(dll.GetName().Name)))
-            //    {
-            //        try
-            //        {
-                        
-            //            if (!_agents.ContainsKey(dll.GetName().Name))
-            //            {
-            //                _agents.Add(dll.GetName().Name, dll.GetType());
-            //            }
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            Console.WriteLine(ex.ToString());
-            //        }
-            //    }
-            //}
-
-            //var rc = HostFactory.Run(x =>                                   //1
-            //{
-            //    x.Service<TownCrier>(s =>                                   //2
-            //    {
-            //        s.ConstructUsing(name => new TownCrier());                //3
-            //        s.WhenStarted(tc => tc.Start());                         //4
-            //        s.WhenStopped(tc => tc.Stop());                          //5
-            //    });
-            //    x.RunAsLocalSystem();                                       //6
-
-            //    x.SetDescription("Sample Topshelf Host");                   //7
-            //    x.SetDisplayName("Stuff");                                  //8
-            //    x.SetServiceName("Stuff");                                  //9
-            //});                                                             //10
             
-            
-            
-            //var rc1 = HostFactory.Run(x => //1
-            //{
-            //    x.Service<ServiceManager>(s => //2
-            //    {
-            //        s.ConstructUsing(name => new ServiceManager(agents)); //3
-            //        s.WhenStarted(tc => tc.Start()); //4
-            //        s.WhenStopped(tc => tc.Stop()); //5
-            //    });
-            //    x.RunAsLocalSystem(); //6
-
-            //    x.SetDescription("IntegrationTestPFS Topshelf Host"); //7
-            //    x.SetDisplayName("IntegrationTestPFS_Stuff"); //8
-            //    x.SetServiceName("IntegrationTestPFS_Stuff"); //9
-            //});
-            //var exitCode = (int)Convert.ChangeType(rc1, rc1.GetTypeCode());
-            //var rc1 = HostFactory.Run(x =>                                   //1
-            //{
-            //    x.Service<LineAgent>(s =>                                   //2
-            //    {
-            //        var agent = servProvider.GetRequiredService<IAgent>();
-            //        //s.ConstructUsing(name => new LineAgent(1,sde, logger, persistenceProvider));                //3
-            //        s.ConstructUsing(name => servProvider.GetRe);                //3
-            //        s.WhenStarted(tc => tc.Start());                         //4
-            //        s.WhenStopped(tc => tc.Stop());                          //5
-            //    });
-            //    x.RunAsLocalSystem();                                       //6
-
-            //    x.SetDescription("Sample Topshelf LineAgent");                   //7
-            //    x.SetDisplayName("LA Stuff");                                  //8
-            //    x.SetServiceName("LA Stuff");                                  //9
-            //});
-            // var exitCode = (int)Convert.ChangeType(rc, rc.GetTypeCode());  //11
             Console.ReadLine();
             //Environment.ExitCode = exitCode;
         }
@@ -115,60 +49,12 @@ namespace IntegrationTest.Host
             AppDomain domain = AppDomain.CreateDomain("IntegrationTests");
             domain.GetAssemblies().ToList().ForEach(Console.WriteLine);
             //domain.InitializeLifetimeService();
-            var type = typeof(AgentService);
-            service = (AgentService)domain.CreateInstanceAndUnwrap(type.Assembly.FullName, type.FullName);
-            //AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CreateAssemblyResolver(assemblyDirs, s => null, Assembly.ReflectionOnlyLoadFrom, _logger);//Assembly.ReflectionOnlyLoad
-            //AppDomain.CurrentDomain.AssemblyResolve += CreateAssemblyResolver(assemblyDirs, s => null, Assembly.LoadFrom, _logger);
-            //AppDomain.CurrentDomain.TypeResolve += CreateAssemblyResolver(assemblyDirs, s => null, Assembly.LoadFrom, _logger);
-            //AgentService agentService = new AgentService();
+            var type = typeof(AgentHost);
+            service = (AgentHost)domain.CreateInstanceAndUnwrap(type.Assembly.FullName, type.FullName);
+            service.InjectAgentService(new PlantAgentService());
             service.Start();
         }
 
 
-    }
-
-    
-    public class TownCrier
-    {
-        readonly Timer _timer;
-        public TownCrier()
-        {
-            _timer = new Timer(1000) { AutoReset = true };
-            _timer.Elapsed += (sender, eventArgs) => Console.WriteLine("It is {0} and all is well", DateTime.Now);
-        }
-
-        public void Start()
-        {
-            _timer.Start();
-        }
-
-        public void Stop()
-        {
-            _timer.Stop();
-        }
-    }
-
-   
-
-    internal class Bootstrapper
-    {
-        public static IServiceProvider GetServiceProvider(IServiceCollection services, IEnumerable<IAgent> agents)
-        {
-            foreach(var agent in agents)
-                services.AddSingleton<IAgent>(agent);
-            //services.AddSingleton<agent>(provider =>
-            //{
-            //    var jobFactory = new agent(provider);
-            //    return jobFactory;
-            //});
-            //services.AddSingleton<InvoiceProcessingJob>();
-
-            //services.AddSingleton<ITodoRepository, TodoRepository>();
-
-            //services.AddHttpClient<ITodoApiClient, TodoApiClient>();
-
-            var serviceProvider = services.BuildServiceProvider();
-            return serviceProvider;
-        }
     }
 }
